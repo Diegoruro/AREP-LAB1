@@ -1,10 +1,10 @@
-package main.java.edu.escuelaing.arep;
+package edu.escuelaing.arep;
 
 /**
  * Hello world!
  *
  */
-public class App 
+public class App
 {
     public static void main( String[] args )
     {
