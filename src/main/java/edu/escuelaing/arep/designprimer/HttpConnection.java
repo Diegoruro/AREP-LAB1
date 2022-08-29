@@ -7,9 +7,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 public class HttpConnection {
     private static final String USER_AGENT = "Mozilla/5.0";
+
+    private static final Logger LOGGER = Logger.getLogger(HttpConnection.class.getName());
 
     public static String getStock(Request request) throws IOException {
         String getUrl = request.getProvider();
@@ -18,7 +21,8 @@ public class HttpConnection {
             getUrl = getUrl.replace("$TIME", request.getTime());
         }
         else if (getUrl.contains("api.polygon.io")){
-            getUrl = getUrl.replace("$TIME",LocalDate.now().minusDays(2).toString());
+            LOGGER.info("Requesting stock with date "+ LocalDate.now().minusDays(2).toString());
+            getUrl = getUrl.replace("$TIME",LocalDate.now().minusDays(3).toString());
         }
         URL obj = new URL(getUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
