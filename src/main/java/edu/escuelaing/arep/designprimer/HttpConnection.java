@@ -18,12 +18,16 @@ public class HttpConnection {
         String getUrl = request.getProvider();
         getUrl = getUrl.replace("$STOCKNAME",request.getStockName());
         if (getUrl.contains("www.alphavantage.co")){
+            if (!request.getTime().equals("INTRADAY")){
+                getUrl.replace("&interval=60min","");
+            }
             getUrl = getUrl.replace("$TIME", request.getTime());
         }
         else if (getUrl.contains("api.polygon.io")){
-            LOGGER.info("Requesting stock with date "+ LocalDate.now().minusDays(2).toString());
+            LOGGER.info("Requesting stock with date "+ LocalDate.now().minusDays(3));
             getUrl = getUrl.replace("$TIME",LocalDate.now().minusDays(3).toString());
         }
+        LOGGER.info("Requesting to URL: "+getUrl);
         URL obj = new URL(getUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");

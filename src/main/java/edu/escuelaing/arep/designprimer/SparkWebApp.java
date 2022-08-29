@@ -49,8 +49,8 @@ public class SparkWebApp {
     public static String getProvider(int number, String stockName, String time){
         switch (number){
             case 0:
-                requestInfo = stockName+", "+time +", https://www.alphavantage.co/query?function=TIME_SERIES_$TIME&symbol=$STOCKNAME&apikey=M0S4OCCQ7ELSDKH3";
-                return "https://www.alphavantage.co/query?function=TIME_SERIES_$TIME&symbol=$STOCKNAME&apikey=M0S4OCCQ7ELSDKH3";
+                requestInfo = stockName+", "+time +", https://www.alphavantage.co/query?function=TIME_SERIES_$TIME&symbol=$STOCKNAME&interval=60min&apikey=M0S4OCCQ7ELSDKH3";
+                return "https://www.alphavantage.co/query?function=TIME_SERIES_$TIME&symbol=$STOCKNAME&interval=60min&apikey=M0S4OCCQ7ELSDKH3";
             case 1:
                 requestInfo = stockName+", https://api.polygon.io/v1/open-close/$STOCKNAME/$TIME?adjusted=true&apiKey=6aOpL4kJgNw8Ep47rJrGBG7YwrAu0Py2";
                 return "https://api.polygon.io/v1/open-close/$STOCKNAME/$TIME?adjusted=true&apiKey=6aOpL4kJgNw8Ep47rJrGBG7YwrAu0Py2";
