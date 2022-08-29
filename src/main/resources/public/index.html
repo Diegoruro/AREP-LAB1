@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>US Trading Stocks</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="indexStyle.css">
+</head>
+
+<body>
+    <div class="topbar">
+        <h2 class="title">Enterprises Stocks Provider</h2>
+    </div>
+    <div></div>
+    <form action="/stocks">
+        <label for="name">Enterprise name:</label><br>
+        <input type="text" id="name" name="name" value="MSFT"><br><br>
+        <label>Select Provider:</label>
+        <select id="provider" name="selectProvider">
+            <option value="0" selected>Alpha Vantage</option>
+            <option value="1">Polygon</option>
+        </select>
+        <div id="time">
+            <label>Select time interval:</label>
+            <select id="timeOption" name="selectTime">
+                <option value="INTRADAY" selected>Intraday</option>
+                <option value="DAILY">Daily</option>
+                <option value="WEEKLY">Weekly</option>
+                <option value="MONTHLY">Monthly</option>
+            </select>
+        </div>
+        <div>
+            <input type="button" value="Submit" onclick="loadGetMsg()">
+        </div>
+    </form>
+    <div id="getrespmsg"></div>
+    <table id="table" style="display: none">
+        <tr class="table-header">
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+        </tr>
+    </table>
+
+    <script>
+
+        const MAXELEMENTS = 150;        
+
+        let provider = document.getElementById("provider");
+        let timeConfig = document.getElementById("time");
+
+        provider.addEventListener('change', (event) => {
+            if (provider.value == "0") {
+                timeConfig.style.display = "";
+            } else timeConfig.style.display = "none";
+        })
+
+        function loadGetMsg() {
+            let stock = document.getElementById("name").value;
+            let time = document.getElementById("timeOption").value;
+            let provider = document.getElementById("provider").value;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                buildTable(JSON.parse(this.responseText));
+            }
+            xhttp.open("GET", "/stocks?stockName=" + stock + "&time=" + time + "&provider=" + provider);
+            xhttp.send();
+        }
+        function buildTable(json) {
+            console.log(json);
+            cleanData([...document.getElementsByClassName("row")]);
+            let table = document.getElementById("table");
+            table.style.display = "";
+            switch (provider.value) {
+                case "0":
+                    let mainData = json[Object.keys(json)[1]];
+                    let num = 0;
+                    for (key in mainData) {
+                        let row = `<tr class="row">
+                                                                                          <td>${key}</td>
+                                                                                          <td>${mainData[key]["1. open"]}</td>
+                                                                                          <td>${mainData[key]["2. high"]}</td>
+                                                                                          <td>${mainData[key]["3. low"]}</td>
+                                                                                          <td>${mainData[key]["4. close"]}</td>
+                                                                                          <td>${mainData[key]["5. volume"]}</td>
+                                                                                </tr>`
+                        table.innerHTML += row;
+                        num++;
+                        if (num > MAXELEMENTS) break;
+                    }
+                    break;
+                case "1":
+                    let row = `<tr class="row">
+                                                                                <td>${json.from}</td>
+                                                                                <td>${json.open}</td>
+                                                                                <td>${json.high}</td>
+                                                                                <td>${json.low}</td>
+                                                                                <td>${json.close}</td>
+                                                                                <td>${json.volume}</td>
+                                                                      </tr>`
+                    table.innerHTML += row;
+                    break;
+                default:
+                    break;
+            }
+        }
+        function cleanData(data){
+            data.forEach(element => {
+                element.remove();
+            });
+        }
+    </script>
+</body>
+
+</html>

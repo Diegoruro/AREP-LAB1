@@ -1,4 +1,4 @@
-package test.java.edu.escuelaing.arep;
+package edu.escuelaing.arep;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
